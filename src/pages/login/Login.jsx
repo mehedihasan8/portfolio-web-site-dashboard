@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLoginMutation } from "../../Redux/features/auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { storeUserInfo } from "../../Services/Action/auth.services";
 
 const LoginPage = () => {
   const [loginMutation] = useLoginMutation();
@@ -24,18 +25,16 @@ const LoginPage = () => {
     };
     try {
       const data = await loginMutation(userData).unwrap();
-      console.log(data);
       if (data && data.success === true) {
         toast.success(data?.message);
 
-        // storeUserInfo({ accessToken: data?.data?.token });
+        storeUserInfo({ accessToken: data?.data?.accessToken });
         navigate("/");
         setTimeout(() => {
           window.location.reload();
         }, 700);
       }
     } catch (error) {
-      console.log(error);
       toast.error(error?.data.message);
     }
   };
