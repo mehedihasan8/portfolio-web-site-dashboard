@@ -25,7 +25,7 @@ function App() {
             className="drawer-overlay"
           ></label>
 
-          <Sidebar></Sidebar>
+          <Sidebar />
         </div>
       </div>
     </div>
