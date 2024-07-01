@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { FaProjectDiagram } from "react-icons/fa";
 import { FaGithub, FaLink } from "react-icons/fa6";
+import { HiSquare3Stack3D } from "react-icons/hi2";
 import { MdTitle } from "react-icons/md";
+import { PiChatCenteredText } from "react-icons/pi";
 
 const AddProject = () => {
   //   const [loading, serLoading] = useState(false);
@@ -93,6 +95,8 @@ const AddProject = () => {
           </div>
           <div className="flex items-center justify-between gap-5 mt-5">
             <label className="input input-bordered flex items-center gap-2 w-full relative">
+              <HiSquare3Stack3D />
+
               <input
                 type="text"
                 placeholder="Add Technology"
@@ -119,9 +123,11 @@ const AddProject = () => {
             ))}
           </div>
         </div>
-        <div className="mt-8">
+        <div className="mt-8 relative">
+          <PiChatCenteredText className="size-[18px] absolute top-[14px] left-3" />
+
           <textarea
-            className="textarea textarea-bordered w-full h-28"
+            className="textarea textarea-bordered w-full h-28 px-[34px]"
             placeholder="Type Project Details"
           />
         </div>
