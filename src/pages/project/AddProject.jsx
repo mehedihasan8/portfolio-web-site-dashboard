@@ -7,6 +7,8 @@ import { PiChatCenteredText } from "react-icons/pi";
 import GetAllProject from "./GetAllProject";
 import { useForm } from "react-hook-form";
 import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
+import { useCreateProjectMutation } from "../../Redux/features/project/projectApi";
+import { toast } from "sonner";
 
 const AddProject = () => {
   const {
@@ -15,10 +17,11 @@ const AddProject = () => {
     reset,
     formState: { errors },
   } = useForm({});
-  //   const [loading, serLoading] = useState(false);
+  const [loading, serLoading] = useState(false);
   const [technology, setTechnology] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
   const [photos, setPhotos] = useState([]);
+  const [createProject] = useCreateProjectMutation();
 
   const [techInput, setTechInput] = useState("");
 
@@ -35,24 +38,26 @@ const AddProject = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data?.projectImage[0]);
+    serLoading(true);
     const image = await uploadToImgBB(photos[0]);
-    console.log("image upload link", image);
 
     const projectData = {
-      title: data?.title,
-      description: data?.title,
-      frontEndTech: data?.title,
-      backEndTech: data?.title,
-      frontEndRepo: data?.title,
-      backEndRepo: data?.title,
-      liveLink: data?.title,
-      image: data?.title,
-      duration: data?.title,
+      name: data?.projectName,
+      title: data?.projectTitle,
+      description: data?.projectDetails,
+      tech: technology,
+      githubClient: data?.githubClient,
+      githubServer: data?.githubServer,
+      liveLink: data?.liveLink,
+      image,
     };
-    console.log({ projectData });
-    data.technology = technology;
-    reset(); // add technology to the form data
+    const res = await createProject(projectData);
+    if (res?.data?.success === true) {
+      toast.success(res.data.message);
+      serLoading(false);
+    }
+    reset();
+    setTechnology([]);
   };
 
   return (
@@ -215,7 +220,7 @@ const AddProject = () => {
               <input
                 className="bg-blue-800 py-3 px-14 rounded font-semibold cursor-pointer"
                 type="submit"
-                value="Create Project"
+                value={loading ? "Loading..." : "Create Project"}
               />
             </div>
           </form>
