@@ -5,11 +5,20 @@ import { HiSquare3Stack3D } from "react-icons/hi2";
 import { MdTitle } from "react-icons/md";
 import { PiChatCenteredText } from "react-icons/pi";
 import GetAllProject from "./GetAllProject";
+import { useForm } from "react-hook-form";
+import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
 
 const AddProject = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({});
   //   const [loading, serLoading] = useState(false);
   const [technology, setTechnology] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
+  const [photos, setPhotos] = useState([]);
 
   const [techInput, setTechInput] = useState("");
 
@@ -23,6 +32,27 @@ const AddProject = () => {
   const deleteTechnology = (text) => {
     const deleteTechnology = technology.filter((a) => text !== a);
     setTechnology([...deleteTechnology]);
+  };
+
+  const onSubmit = async (data) => {
+    console.log(data?.projectImage[0]);
+    const image = await uploadToImgBB(photos[0]);
+    console.log("image upload link", image);
+
+    const projectData = {
+      title: data?.title,
+      description: data?.title,
+      frontEndTech: data?.title,
+      backEndTech: data?.title,
+      frontEndRepo: data?.title,
+      backEndRepo: data?.title,
+      liveLink: data?.title,
+      image: data?.title,
+      duration: data?.title,
+    };
+    console.log({ projectData });
+    data.technology = technology;
+    reset(); // add technology to the form data
   };
 
   return (
@@ -52,66 +82,93 @@ const AddProject = () => {
       </div>
       {isVisible ? (
         <div>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div className="flex items-center justify-between gap-5">
                 <label className="input input-bordered flex items-center gap-2 w-2/4">
                   <FaProjectDiagram />
                   <input
-                    name="projectName"
+                    {...register("projectName")}
                     type="text"
                     autoComplete="off"
                     className="grow"
                     placeholder="Project Name"
                   />
                 </label>
+                {errors.projectName && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.projectName.message}
+                  </p>
+                )}
                 <label className="input input-bordered flex items-center gap-2 w-2/4">
                   <MdTitle size={20} />
                   <input
-                    name="projectTitle"
+                    {...register("projectTitle")}
                     type="text"
                     autoComplete="off"
                     className="grow"
                     placeholder="Project Title"
                   />
                 </label>
+                {errors.projectTitle && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.projectTitle.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between gap-5 mt-5">
                 <label className="input input-bordered flex items-center gap-2 w-2/4">
                   <FaGithub />
                   <input
-                    name="githubClient"
+                    {...register("githubClient")}
                     type="text"
                     autoComplete="off"
                     className="grow"
                     placeholder="GitHub Client Link..."
                   />
                 </label>
+                {errors.githubClient && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.githubClient.message}
+                  </p>
+                )}
                 <label className="input input-bordered flex items-center gap-2 w-2/4">
                   <FaGithub />
                   <input
-                    name="githubServer"
+                    {...register("githubServer")}
                     type="text"
                     autoComplete="off"
                     className="grow"
                     placeholder="GitHub Server Link..."
                   />
                 </label>
+                {errors.githubServer && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.githubServer.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between gap-5 mt-5">
                 <label className="input input-bordered flex items-center gap-2 w-2/4">
                   <FaLink />
                   <input
-                    name="liveLink"
+                    {...register("liveLink")}
                     type="text"
                     className="grow"
                     autoComplete="off"
                     placeholder="Project Live Link..."
                   />
                 </label>
+                {errors.liveLink && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.liveLink.message}
+                  </p>
+                )}
                 <div className="w-2/4">
                   <input
-                    accept="*/image"
+                    {...register("projectImage")}
+                    accept="image/*"
+                    onChange={(e) => setPhotos(Array.from(e.target.files))}
                     type="file"
                     className="file-input file-input-bordered w-full"
                   />
@@ -120,7 +177,6 @@ const AddProject = () => {
               <div className="flex items-center justify-between gap-5 mt-5">
                 <label className="input input-bordered flex items-center gap-2 w-full relative">
                   <HiSquare3Stack3D />
-
                   <input
                     type="text"
                     placeholder="Add Technology"
@@ -139,7 +195,7 @@ const AddProject = () => {
                 {technology.map((tech, index) => (
                   <span
                     key={index}
-                    onClick={(e) => deleteTechnology(e.target.innerText)}
+                    onClick={() => deleteTechnology(tech)}
                     className="inline-block bg-gray-200 text-gray-700 py-1 px-2 m-1 rounded transition-all duration-300 hover:bg-red-500 hover:cursor-pointer hover:text-white"
                   >
                     {tech}
@@ -149,8 +205,8 @@ const AddProject = () => {
             </div>
             <div className="mt-8 relative">
               <PiChatCenteredText className="size-[18px] absolute top-[14px] left-3" />
-
               <textarea
+                {...register("projectDetails")}
                 className="textarea textarea-bordered w-full h-28 px-[34px]"
                 placeholder="Type Project Details"
               />
