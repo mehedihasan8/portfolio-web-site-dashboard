@@ -12,7 +12,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     getProjects: builder.query({
       query: () => ({
-        url: "/projects/getProjects",
+        url: "/projects",
         method: "GET",
       }),
     }),
