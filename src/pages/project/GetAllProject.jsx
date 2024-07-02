@@ -1,8 +1,21 @@
-import { useGetProjectsQuery } from "../../Redux/features/project/projectApi";
+import { toast } from "sonner";
+import {
+  useDeleteProjectMutation,
+  useGetProjectsQuery,
+} from "../../Redux/features/project/projectApi";
 
 const GetAllProject = () => {
-  const { data } = useGetProjectsQuery(undefined);
-  console.log({ data });
+  const { data, refetch } = useGetProjectsQuery(undefined);
+  const [deleteProject] = useDeleteProjectMutation();
+
+  const deleteHandler = async (id) => {
+    const res = await deleteProject(id);
+    if (res?.data?.success === true) {
+      toast.success(res.data.message);
+      refetch();
+    }
+  };
+
   return (
     <div className="overflow-x-auto border border-gray-500">
       <table className="table">
@@ -22,7 +35,10 @@ const GetAllProject = () => {
               <td>{project?.name}</td>
               <td>{project?.title}</td>
               <td className="text-center">
-                <p className="cursor-pointer hover:underline w-fit mx-auto">
+                <p
+                  onClick={() => deleteHandler(project?._id)}
+                  className="cursor-pointer hover:underline w-fit mx-auto"
+                >
                   Delete
                 </p>
               </td>
