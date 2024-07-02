@@ -1,94 +1,101 @@
-import { FaPen } from "react-icons/fa";
-import { FaTrashCan } from "react-icons/fa6";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { IoMdSettings } from "react-icons/io";
+import { useState } from "react";
+import { toast } from "sonner";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the Quill CSS for proper styling
 
-function Blog() {
+const Blog = () => {
+  const [loading, setLoading] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [detail, setDetail] = useState("");
+  const [title, setTitle] = useState("");
+  // const [createFunction] = useCreateBlogMutation();
+
+  const handlerSubmit = async () => {
+    setLoading(true);
+    if (photos.length < 1) {
+      setLoading(false);
+      return toast.error("Image is missing");
+    }
+
+    if (!detail) {
+      setLoading(false);
+      return toast.error("Detail is missing");
+    }
+    if (!title) {
+      setLoading(false);
+      return toast.error("Title is missing");
+    }
+
+    // const image = await cloudINary(photos[0]);
+
+    const info = {
+      title,
+      detail,
+    };
+    console.log({ info });
+
+    // const res = await createFunction(info);
+
+    setLoading(false);
+  };
+
   return (
-    <div className="bg-[#F1F5F9] h-full p-8">
-      <div className="flex items-center justify-between">
-        <div className="">
-          <p className="text-3xl text-blue-950 font-semibold">
-            Skill Dashboard{" "}
-          </p>
-          <p className="text-xs text-[#7b818a]">
-            Keep track of your skill status{" "}
-          </p>
+    <div className="w-full px-4 pb-24">
+      <h2 className="text-[30px] font-semibold text-gray-50 text-center mt-10 pb-4">
+        Create Blog
+      </h2>
+      <h1>{detail}</h1>
+      <section className="flex justify-between items-center gap-5">
+        <div className="text-center my-5 w-2/4">
+          <input
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter type blog title..."
+            className="input input-bordered input-md w-full my-3"
+            name="title"
+            required
+          />
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-[#7b818a] rounded-full border border-[#7b818a67] py-2 px-4 text-sm transition-all ease-in-out hover:bg-[#7b818a2c] duration-300">
-            <IoMdSettings className="text-lg" />
-            <span className="font-bold">Settings</span>
-          </div>
-          <div className="flex items-center gap-2 text-white bg-[#564DE6] rounded-full border border-[#564DE6] py-2 px-4 text-sm  transition-all ease-in-out hover:bg-[#2f24c8] duration-300">
-            <HiOutlinePencilAlt className="text-lg" />
-            <span className="font-bold">Add Skill</span>
-          </div>
+        <div className="text-center my-5 w-2/4">
+          <input
+            onChange={(e) => setPhotos(Array.from(e.target.files))}
+            type="file"
+            className="file-input input-bordered my-3 w-full"
+          />
         </div>
-      </div>
+      </section>
 
-      <div className=" my-7">
-        <div className="overflow-x-auto rounded-3xl border border-b-0 border-[#7b818a2a]">
-          <table className="table ">
-            {/* head */}
-            <thead>
-              <tr className="bg-[#7b818a1e] text-[#75777b]">
-                <th className="py-5">Skill Name</th>
-                <th>Catagory</th>
-                <th>Expertise</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {/* row 1 */}
-              <tr className="border-b border-[#7b818a2a]">
-                <td className="py-5">Html</td>
-                <td>Frond-End</td>
-                <td>80%</td>
-                <td>
-                  <div className="flex items-center gap-5">
-                    <FaPen />
-                    <FaTrashCan />
-                  </div>
-                </td>
-              </tr>
-              {/* row 2 */}
-              <tr className="border-b border-[#7b818a2a]">
-                <td className="py-5">Css</td>
-                <td>Frond-End</td>
-                <td>90%</td>
-                <td>
-                  <div className="flex items-center gap-5">
-                    <FaPen />
-                    <FaTrashCan />
-                  </div>
-                </td>
-              </tr>
-              {/* row 3 */}
-              <tr className="border-b border-[#7b818a2a]">
-                <td className="py-5">js</td>
-                <td>Back-End</td>
-                <td>95%</td>
-                <td>
-                  <div className="flex items-center gap-5">
-                    <FaPen />
-                    <FaTrashCan />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <section>
+        <div>
+          <p className="text-[18px] font-[500] pb-2">Detail</p>
+          <ReactQuill
+            value={detail}
+            onChange={setDetail}
+            className="placeholder:text-gray-300"
+            placeholder="Enter your content"
+            style={{
+              height: "250px",
+              width: "100%",
+              margin: "auto",
+            }}
+          />
         </div>
-      </div>
+      </section>
 
-      <div className="w-fit">
-        <div className=" text-[#7b818a] rounded-full border border-[#7b818a67] py-2 px-7 text-sm transition-all ease-in-out hover:bg-[#7b818a2c] duration-300">
-          <span className="font-semibold">See All Skill</span>
-        </div>
-      </div>
+      <section onClick={() => handlerSubmit()} className="text-center mt-20">
+        {loading ? (
+          <button className="w-full md:w-[30%] mx-auto flex justify-center bg-gradient-to-r from-blue-500 to-blue-400 hover:shadow-lg text-gray-100 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 py-2 px-5">
+            <span className="loading loading-dots loading-md"></span>
+          </button>
+        ) : (
+          <button className="w-full md:w-[30%] mx-auto flex justify-center bg-gradient-to-r from-blue-500 to-blue-400 hover:shadow-lg text-gray-100 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 py-2 px-5">
+            Submit
+          </button>
+        )}
+      </section>
     </div>
   );
-}
+};
 
 export default Blog;

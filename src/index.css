@@ -17,3 +17,7 @@
     @apply flex items-center gap-5 text-[#e2e9f3] py-3 transition-all ease-out rounded-lg hover:px-2 hover:bg-[#d6e3f330] duration-300;
   }
 }
+
+.ql-editor.ql-blank::before {
+  color: #979da2 !important;
+}
