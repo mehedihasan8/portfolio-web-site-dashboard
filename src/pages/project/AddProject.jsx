@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
 import { useCreateProjectMutation } from "../../Redux/features/project/projectApi";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const AddProject = () => {
   const {
@@ -81,9 +82,11 @@ const AddProject = () => {
             See All Project
           </h1>
         </div>
-        <h1 className="text-primaryColor underline text-lg hover:text-blue-600 transition-all">
-          Back To Home
-        </h1>
+        <Link to={"/"}>
+          <h1 className="text-primaryColor underline text-lg hover:text-blue-600 transition-all">
+            Back To Home
+          </h1>
+        </Link>
       </div>
       {isVisible ? (
         <div>

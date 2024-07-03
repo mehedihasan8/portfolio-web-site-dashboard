@@ -9,7 +9,6 @@ import { Toaster } from "sonner";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <Toaster richColors position="top-center" />
-
     <RouterProvider router={router} />
   </Provider>
 );
