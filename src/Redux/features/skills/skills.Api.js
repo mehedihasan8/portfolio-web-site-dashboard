@@ -11,7 +11,7 @@ const skillsApi = baseApi.injectEndpoints({
     }),
     getSkills: builder.query({
       query: () => ({
-        url: "/skills/getSkills",
+        url: "/skill",
         method: "GET",
       }),
     }),
@@ -30,7 +30,7 @@ const skillsApi = baseApi.injectEndpoints({
     }),
     deleteSkills: builder.mutation({
       query: (id) => ({
-        url: `/skills/deleteSkills/${id}`,
+        url: `/skill/${id}`,
         method: "DELETE",
       }),
     }),

@@ -2,7 +2,11 @@ import { useState } from "react";
 import { GiSkills } from "react-icons/gi";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
-import { useCreateSkillMutation } from "../../Redux/features/skills/skills.Api";
+import {
+  useCreateSkillMutation,
+  useDeleteSkillsMutation,
+  useGetSkillsQuery,
+} from "../../Redux/features/skills/skills.Api";
 import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
 import { toast } from "sonner";
 
@@ -11,6 +15,8 @@ const Skill = () => {
   const [skill, setSkill] = useState("");
   const [photos, setPhotos] = useState([]);
   const [createSkill] = useCreateSkillMutation();
+  const { data, refetch } = useGetSkillsQuery();
+  const [deletedSkill] = useDeleteSkillsMutation();
 
   const handleSubmitSkill = async () => {
     setLoading(true);
@@ -18,9 +24,19 @@ const Skill = () => {
     const res = await createSkill({ name: skill, image });
     if (res?.data?.success) {
       toast.success("Skill Create Successfull!");
+      refetch();
       setSkill("");
       setPhotos([]);
       setLoading(false);
+    }
+  };
+
+  const deleteHandler = async (id) => {
+    const res = await deletedSkill(id);
+    console.log(res);
+    if (res?.data?.success === true) {
+      toast.success("Skill Delete Successfull!");
+      refetch();
     }
   };
 
@@ -44,38 +60,31 @@ const Skill = () => {
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto border border-gray-500 mt-6">
+      <div className="overflow-x-auto border border-gray-500 mt-6 max-w-xl mx-auto">
         <table className="table">
           <thead>
             <tr>
               <th>No</th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
+              <th className="text-center">Name</th>
+              <th className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
-            <tr className="hover:bg-[#0F172A] transition-all">
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-            </tr>
-            {/* row 2 */}
-            <tr className="hover:bg-[#0F172A] transition-all">
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>Purple</td>
-            </tr>
-            {/* row 3 */}
-            <tr className="hover:bg-[#0F172A] transition-all">
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>Red</td>
-            </tr>
+            {data?.data?.map((skill, i) => (
+              <tr key={skill._id} className="hover:bg-[#0F172A] transition-all">
+                <th>{i + 1}</th>
+                <td className="text-center">{skill?.name}</td>
+                <td className="text-center">
+                  <p
+                    onClick={() => deleteHandler(skill?._id)}
+                    className="cursor-pointer hover:underline w-fit mx-auto"
+                  >
+                    Delete
+                  </p>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

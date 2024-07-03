@@ -10,11 +10,9 @@ export const uploadToImgBB = async (data) => {
         body: formData,
       }
     );
-    console.log(response);
     const result = await response.json();
     return result.data.url ?? null;
   } catch (error) {
-    console.error("Error uploading image:", error);
     return null;
   }
 };
