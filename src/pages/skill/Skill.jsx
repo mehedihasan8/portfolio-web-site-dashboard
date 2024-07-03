@@ -7,28 +7,38 @@ import {
   useDeleteSkillsMutation,
   useGetSkillsQuery,
 } from "../../Redux/features/skills/skills.Api";
-import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
 import { toast } from "sonner";
+import { FaPercent } from "react-icons/fa";
 
 const Skill = () => {
   const [loading, setLoading] = useState(false);
   const [skill, setSkill] = useState("");
-  const [photos, setPhotos] = useState([]);
+  const [percentage, setPercentage] = useState(0);
   const [createSkill] = useCreateSkillMutation();
+  const [selectedValue, setSelectedValue] = useState("frontend");
+
   const { data, refetch } = useGetSkillsQuery();
   const [deletedSkill] = useDeleteSkillsMutation();
 
   const handleSubmitSkill = async () => {
     setLoading(true);
-    const image = await uploadToImgBB(photos[0]);
-    const res = await createSkill({ name: skill, image });
+    const res = await createSkill({
+      name: skill,
+      percentage,
+      stack: selectedValue,
+    });
+
     if (res?.data?.success) {
       toast.success("Skill Create Successfull!");
       refetch();
       setSkill("");
-      setPhotos([]);
+
       setLoading(false);
     }
+  };
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
   };
 
   const deleteHandler = async (id) => {
@@ -66,6 +76,8 @@ const Skill = () => {
             <tr>
               <th>No</th>
               <th className="text-center">Name</th>
+              <th className="text-center">Percentage</th>
+              <th className="text-center">Stack</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -75,6 +87,10 @@ const Skill = () => {
               <tr key={skill._id} className="hover:bg-[#0F172A] transition-all">
                 <th>{i + 1}</th>
                 <td className="text-center">{skill?.name}</td>
+                <td className="text-center">{skill?.percentage}%</td>
+                <td className="text-center ">
+                  {skill?.stack === "frontend" ? "Front-End" : "Back-End"}
+                </td>
                 <td className="text-center">
                   <p
                     onClick={() => deleteHandler(skill?._id)}
@@ -111,13 +127,40 @@ const Skill = () => {
                 placeholder="Type Your Skill..."
               />
             </label>
-            <div className="w-full">
+            <label className="input input-bordered flex items-center gap-2 w-full">
+              <FaPercent />
               <input
-                accept="*/image"
-                type="file"
-                onChange={(e) => setPhotos(Array.from(e.target.files))}
-                className="file-input file-input-bordered w-full"
+                name=""
+                type="number"
+                onChange={(e) => setPercentage(e.target.value)}
+                className="grow"
+                autoComplete="off"
+                placeholder="Type Skill Percentage..."
               />
+            </label>
+            <div className="flex items-center justify-start gap-6 w-full pb-2">
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="radio-1"
+                  value="frontend"
+                  className="radio"
+                  checked={selectedValue === "frontend"}
+                  onChange={handleChange}
+                />
+                <label>Front-End Skill</label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="radio-1"
+                  value="backend"
+                  className="radio"
+                  checked={selectedValue === "backend"}
+                  onChange={handleChange}
+                />
+                <label>Back-End Skill</label>
+              </div>
             </div>
             <button
               onClick={() => handleSubmitSkill()}
