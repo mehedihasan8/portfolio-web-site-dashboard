@@ -2,16 +2,28 @@ import { useState } from "react";
 import { GiSkills } from "react-icons/gi";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
+import { useCreateSkillMutation } from "../../Redux/features/skills/skills.Api";
+import { uploadToImgBB } from "../../Services/Cloud/ImbBB";
+import { toast } from "sonner";
 
 const Skill = () => {
+  const [loading, setLoading] = useState(false);
   const [skill, setSkill] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [createSkill] = useCreateSkillMutation();
 
-  const handleSubmitSkill = () => {
-    console.log("click");
-    console.log({ skill });
-    console.log({ photos });
+  const handleSubmitSkill = async () => {
+    setLoading(true);
+    const image = await uploadToImgBB(photos[0]);
+    const res = await createSkill({ name: skill, image });
+    if (res?.data?.success) {
+      toast.success("Skill Create Successfull!");
+      setSkill("");
+      setPhotos([]);
+      setLoading(false);
+    }
   };
+
   return (
     <div className="py-6 px-4">
       <div className="flex items-center justify-between">
@@ -102,9 +114,8 @@ const Skill = () => {
               onClick={() => handleSubmitSkill()}
               className="bg-blue-800 py-3 w-full rounded font-semibold cursor-pointer"
               type="submit"
-              value="Create Project"
             >
-              Save Your Skill
+              {loading ? "Loading..." : "Save Your Skill"}
             </button>
           </div>
         </div>
