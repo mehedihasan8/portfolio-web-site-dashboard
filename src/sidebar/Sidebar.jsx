@@ -31,7 +31,7 @@ function Sidebar() {
           <MdMiscellaneousServices className="text-2xl" />
           <span className="text-[#d6e3f3]">Skills</span>
         </Link>
-        <Link className="nav-link">
+        <Link to={"/experience"} className="nav-link">
           <TbDevicesStar className="text-2xl" />
           <span className="text-[#d6e3f3]">Experience</span>
         </Link>

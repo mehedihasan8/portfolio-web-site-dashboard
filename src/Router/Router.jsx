@@ -4,6 +4,7 @@ import Skill from "../pages/skill/Skill";
 import Blog from "../pages/blog/Blog";
 import AddProject from "../pages/project/AddProject";
 import LoginPage from "../pages/login/Login";
+import AddExperience from "../pages/experience/AddExperience";
 
 export const router = createBrowserRouter([
   {
@@ -27,8 +28,8 @@ export const router = createBrowserRouter([
         element: <AddProject />,
       },
       {
-        path: "/login",
-        element: <LoginPage />,
+        path: "/experience",
+        element: <AddExperience />,
       },
     ],
   },

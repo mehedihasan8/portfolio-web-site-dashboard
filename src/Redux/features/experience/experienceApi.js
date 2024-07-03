@@ -4,14 +4,14 @@ const experienceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createExperience: builder.mutation({
       query: (userInfo) => ({
-        url: "/experience/createExperience",
+        url: "/experience",
         method: "POST",
         body: userInfo,
       }),
     }),
     getExperience: builder.query({
       query: () => ({
-        url: "/experience/getExperience",
+        url: "/experience",
         method: "GET",
       }),
     }),
@@ -30,7 +30,7 @@ const experienceApi = baseApi.injectEndpoints({
     }),
     deleteExperience: builder.mutation({
       query: (id) => ({
-        url: `/experience/deleteExperience/${id}`,
+        url: `/experience/${id}`,
         method: "DELETE",
       }),
     }),
