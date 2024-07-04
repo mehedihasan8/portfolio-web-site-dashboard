@@ -22,10 +22,9 @@ const GetAllBlog = () => {
           <thead>
             <tr>
               <th>No</th>
-              <th>Company Name</th>
-              <th>Job Type</th>
-              <th>Duration</th>
-              <th>Position</th>
+              <th>Blog Title</th>
+              <th>Blog Content</th>
+
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -45,8 +44,7 @@ const GetAllBlog = () => {
                     }}
                   />
                 </td>
-                <td>{blog?.duration}</td>
-                <td>{blog?.position}</td>
+
                 <td className="text-center">
                   <p
                     onClick={() => deleteHandler(blog?._id)}

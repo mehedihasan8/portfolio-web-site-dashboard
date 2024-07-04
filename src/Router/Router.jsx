@@ -6,6 +6,7 @@ import AddProject from "../pages/project/AddProject";
 import LoginPage from "../pages/login/Login";
 import AddExperience from "../pages/experience/AddExperience";
 import PrivateRoute from "../PrivateRoute";
+import HomePage from "../pages/HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div />,
+        element: <HomePage />,
       },
       {
         path: "/skill",
