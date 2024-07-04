@@ -3,15 +3,15 @@ import { baseApi } from "../../api/baseApi";
 const blogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createBlog: builder.mutation({
-      query: (userInfo) => ({
-        url: "/blogs/createBlog",
+      query: (dataInfo) => ({
+        url: "/blogs",
         method: "POST",
-        body: userInfo,
+        body: dataInfo,
       }),
     }),
     getBlogs: builder.query({
       query: () => ({
-        url: "/blogs/getBlogs",
+        url: "/blogs",
         method: "GET",
       }),
     }),
