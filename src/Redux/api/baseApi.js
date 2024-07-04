@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getUserInfo } from "../../Services/Action/auth.services";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
-  // baseUrl: "https://protfolio-backend-eight.vercel.app/api",
+  // baseUrl: "http://localhost:5000/api",
+  baseUrl: "https://protfolio-backend-eight.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = getUserInfo();
