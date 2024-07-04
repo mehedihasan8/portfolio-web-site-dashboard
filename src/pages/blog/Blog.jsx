@@ -40,9 +40,14 @@ const Blog = () => {
       image,
     };
 
-    await createBlog(info);
-
-    setLoading(false);
+    const res = await createBlog(info);
+    if (res?.data?.success === true) {
+      toast.success("Blog Add Successfull!");
+      setLoading(false);
+      setDetail("");
+      setTitle("");
+      setPhotos([]);
+    }
   };
 
   return (

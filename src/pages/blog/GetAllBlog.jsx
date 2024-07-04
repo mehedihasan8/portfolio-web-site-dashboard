@@ -1,10 +1,19 @@
-import { useGetBlogsQuery } from "../../Redux/features/blog/blogApi";
+import { toast } from "sonner";
+import {
+  useDeleteBlogMutation,
+  useGetBlogsQuery,
+} from "../../Redux/features/blog/blogApi";
 
 const GetAllBlog = () => {
-  const { data } = useGetBlogsQuery(undefined);
-  console.log(data);
-  const deleteHandler = () => {
-    console.log("data");
+  const { data, refetch } = useGetBlogsQuery(undefined);
+  const [deleteBlog] = useDeleteBlogMutation();
+
+  const deleteHandler = async (id) => {
+    const res = await deleteBlog(id);
+    if (res?.data?.success === true) {
+      toast.success(res.data.message);
+      refetch();
+    }
   };
   return (
     <div>
